@@ -1,2 +1,3 @@
-# unshell
-set your shell free
+# Unshell
+
+> Set your shell free
