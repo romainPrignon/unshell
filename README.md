@@ -12,8 +12,8 @@ npm install -g unshell
 ```sh
 unshell script.js
 ```
-where `script.js` is a javascript module which export a generator function
-`** module.exports = function* () {...} **`
+where `script.js` is a javascript module which export a generator function:
+`module.exports = function* () {...}`
 
 ## Contribute
 
