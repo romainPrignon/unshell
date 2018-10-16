@@ -24,7 +24,15 @@ export const unshell = (fn: Function) => async (...args: Array<unknown>) => {
   }
 }
 
-const process = (cmd: string) => console.log(cmd)
+const process = (cmd: string) => {
+  const { execSync } = require('child_process')
+
+  console.log(cmd)
+  const res: Buffer = execSync(cmd)
+  console.log('-> ' + res.toString())
+
+  return res.toString()
+}
 
 // class Unshell(processor) {
 //   do(fn)(args)
