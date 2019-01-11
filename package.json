@@ -9,9 +9,9 @@
     "url": "git+https://github.com/romainPrignon/unshell.git"
   },
   "bin": {
-    "unshell": "dist/cli/index.js"
+    "unshell": "dist/cli.js"
   },
-  "main": "dist/core/index.js",
+  "main": "dist/core.js",
   "engines": {
     "node": "^8.0.0",
     "npm": "^5.3.0"

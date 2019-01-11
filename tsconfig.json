@@ -11,8 +11,8 @@
     "noImplicitReturns": true,
     "lib": [
       "es2018",
-      // "esnext.asynciterable",
-    ],
+      "dom"
+    ]
   },
   "include": [
     "src/**/*"
