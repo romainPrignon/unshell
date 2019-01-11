@@ -13,7 +13,7 @@ const defaultOptions = {
 }
 
 // read env to see what's in it
-const Pontem = (opt: Options = defaultOptions) => {
+const Unshell = (opt: Options = defaultOptions) => {
   return (script: Function) => {
     return async (...args: Array<unknown>) => {
 
@@ -29,19 +29,25 @@ const Pontem = (opt: Options = defaultOptions) => {
         console.log(`• ${cmd.value}`)
 
         try {
-          const { stderr, stdout } = await exec(cmd.value, opt)
+          const { stdout } = await exec(cmd.value, opt)
 
-          if (stderr) {
-            console.error(stderr)
-            process.exit(1)
+          if (stdout) {
+            console.log(`➜ ${stdout}`)
           }
-
-          console.log(`➜ ${stdout}`)
 
           cmd = it.next(stdout)
         } catch (err) {
           console.error(err.stderr)
           process.exit(1)
+        }
+      }
+
+      // last iter
+      if (cmd.done === true && cmd.value) {
+        console.log(`• ${cmd.value}`)
+        const { stdout } = await exec(cmd.value, opt)
+        if (stdout) {
+          console.log(`➜ ${stdout}`)
         }
       }
 
@@ -52,4 +58,4 @@ const Pontem = (opt: Options = defaultOptions) => {
 
 const isGenerator = (fn: Function): fn is GeneratorFunction => fn.constructor.name === 'GeneratorFunction'
 
-export default Pontem
+module.exports = Unshell
