@@ -1,5 +1,5 @@
 type Options = {
-  env: object
+  env: NodeJS.ProcessEnv
 }
 
 import util from 'util'
