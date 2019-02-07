@@ -1,4 +1,5 @@
-const {pipe} = require('../../dist/utils/pipe')
+import { pipe } from './pipe'
+
 
 describe('pipe', () => {
   it('should return a function', () => {
