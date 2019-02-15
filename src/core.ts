@@ -1,25 +1,25 @@
-type Options = {
-  env: NodeJS.ProcessEnv
-}
+import { Options, Command } from '../type'
 
 import util from 'util'
 import child_process from 'child_process'
 
 
-const exec = util.promisify(child_process.exec)
-
 const defaultOptions = {
   env: {}
 }
 
-// read env to see what's in it
 const Unshell = (opt: Options = defaultOptions) => {
-  return (script: Function) => {
+
+  const exec = util.promisify(child_process.exec)
+
+  return (script: (...args: Array<unknown>) => IterableIterator<Command>) => {
     return async (...args: Array<unknown>) => {
 
       if (!isGenerator(script)) {
-        console.error(`module must be a generator`)
-        process.exit(1)
+        const err = new Error(`module must be a generator`)
+        console.error(err)
+
+        throw err
       }
 
       const it = script(...args)
@@ -37,12 +37,16 @@ const Unshell = (opt: Options = defaultOptions) => {
 
           cmd = it.next(stdout)
         } catch (err) {
-          console.error(err.stderr)
-          process.exit(1)
+          console.error({
+            cmd: err.cmd,
+            stderr: err.stderr
+          })
+
+          throw err
         }
       }
 
-      // last iter
+      // last iteration
       if (cmd.done === true && cmd.value) {
         console.log(`• ${cmd.value}`)
         const { stdout } = await exec(cmd.value, opt)
@@ -50,12 +54,10 @@ const Unshell = (opt: Options = defaultOptions) => {
           console.log(`➜ ${stdout}`)
         }
       }
-
-      process.exit(0)
     }
   }
 }
 
 const isGenerator = (fn: Function): fn is GeneratorFunction => fn.constructor.name === 'GeneratorFunction'
 
-module.exports = Unshell
+export default Unshell
