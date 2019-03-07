@@ -20,3 +20,7 @@ where `script.js` is a javascript module which export a generator function:
 ## License
 
 The code is available under the [MIT license](LICENSE).
+
+## TODO
+- factorize iteration and error handling
+- put generator assertion in the client ?
