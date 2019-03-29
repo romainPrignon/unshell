@@ -8,7 +8,7 @@ const defaultOptions = {
   env: {}
 }
 
-const Unshell = (opt: Options = defaultOptions) => {
+export const unshell = (opt: Options = defaultOptions) => {
 
   const exec = util.promisify(child_process.exec)
 
@@ -59,5 +59,3 @@ const Unshell = (opt: Options = defaultOptions) => {
 }
 
 const isGenerator = (fn: Function): fn is GeneratorFunction => fn.constructor.name === 'GeneratorFunction'
-
-export default Unshell

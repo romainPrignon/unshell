@@ -20,7 +20,7 @@
     "build": "rm -rf dist/ && tsc",
     "lint": "tslint --project tsconfig.json",
     "release": "release-it",
-    "test": "jest --detectOpenHandles --forceExit --verbose",
+    "test": "jest --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"
   },
   "dependencies": {

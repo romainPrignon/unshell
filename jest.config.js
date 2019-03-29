@@ -11,5 +11,8 @@ module.exports = {
       branches: 100,
       statements: 100,
     }
-  }
+  },
+  collectCoverageFrom: [
+    'src/**/*.{js,ts}',
+  ]
 }
