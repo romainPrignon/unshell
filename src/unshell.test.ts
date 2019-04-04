@@ -6,7 +6,7 @@ jest.mock('util')
 import util from 'util'
 
 // test
-import Unshell from './core'
+import { unshell } from './unshell'
 
 
 beforeEach(() => {
@@ -21,7 +21,7 @@ afterEach(() => {
   console.error.mockRestore()
 })
 
-describe('Unshell', () => {
+describe('unshell', () => {
   const cmd = `echo OK`
   const stdout = `result of echo OK`
   const stderr = `'Error: exec'`
@@ -36,7 +36,7 @@ describe('Unshell', () => {
     }
 
     // Act
-    const output = Unshell(opt)(script)
+    const output = unshell(opt)(script)
 
     // Assert
     expect(output).toBeInstanceOf(Function)
@@ -49,7 +49,7 @@ describe('Unshell', () => {
     }
 
     // Act
-    const output = Unshell()(script)
+    const output = unshell()(script)
 
     // Assert
     expect(output).toBeInstanceOf(Function)
@@ -62,7 +62,7 @@ describe('Unshell', () => {
     }
 
     try {
-      await Unshell(opt)(script)()
+      await unshell(opt)(script)()
 
       done(`Script is not a generator`)
     } catch (err) {
@@ -90,7 +90,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     // Assert
     expect(console.log).toHaveBeenNthCalledWith(1, `• ${cmd}`)
@@ -114,7 +114,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     expect(execMock).toHaveBeenCalledWith(cmd, opt)
   })
@@ -136,7 +136,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     // Assert
     expect(console.log).toHaveBeenCalledTimes(1)
@@ -161,7 +161,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     expect(execMock).toHaveBeenNthCalledWith(1, cmd, opt)
     expect(execMock).toHaveBeenNthCalledWith(2, cmd, opt)
@@ -189,7 +189,7 @@ describe('Unshell', () => {
 
     // Act
     try {
-      await Unshell(opt)(script)()
+      await unshell(opt)(script)()
 
       done(`It doesn't handle stderr properly`)
     } catch (err) {
@@ -221,7 +221,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     // Assert
     expect(console.log).toHaveBeenNthCalledWith(1, `• ${cmd}`)
@@ -246,7 +246,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     // Assert
     expect(console.log).toHaveBeenCalledTimes(1)
@@ -271,7 +271,7 @@ describe('Unshell', () => {
     })
 
     // Act
-    await Unshell(opt)(script)()
+    await unshell(opt)(script)()
 
     // Assert
     // yield
