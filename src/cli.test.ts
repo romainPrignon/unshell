@@ -1,6 +1,8 @@
 jest.mock('./unshell.ts')
 import * as unshell from './unshell'
 
+jest.mock('path')
+import path from 'path'
 
 import { red } from './utils/colors'
 import { cli } from './cli'
@@ -13,10 +15,12 @@ describe('cli', () => {
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
+    const error = new Error('path-error')
+    path.resolve = jest.fn(() => { throw error })
     console.error = jest.fn()
 
     // Assert
-    await expect(cli({ argv, env })).rejects.toThrow('Path must be a string. Received undefined')
+    await expect(cli({ argv, env })).rejects.toThrow(error)
     expect(console.error).toHaveBeenCalled()
   })
 
@@ -33,6 +37,8 @@ describe('cli', () => {
 
     // @ts-ignore
     unshell.unshell = jest.fn(() => () => () => { throw error })
+
+    path.resolve = jest.fn(() => { return scriptPath })
 
     // Assert
     await expect(cli({ argv, env })).rejects.toThrow(error)
@@ -54,11 +60,10 @@ describe('cli', () => {
     // @ts-ignore
     unshell.unshell = jest.fn(() => () => () => { return })
 
+    path.resolve = jest.fn(() => { return scriptPath })
+
     // Assert
     await expect(cli({ argv, env })).resolves.toEqual(undefined)
     expect(console.error).not.toHaveBeenCalled()
-
-    // Clean
-    jest.restoreAllMocks()
   })
 })

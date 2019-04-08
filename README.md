@@ -1,6 +1,6 @@
 # unshell
 
-> Set your shell free
+> Set your shell free !
 
 ## Setup
 
