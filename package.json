@@ -23,9 +23,7 @@
     "test": "jest --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"
   },
-  "dependencies": {
-    "chalk": "^2.4.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "@types/node": "^10",
