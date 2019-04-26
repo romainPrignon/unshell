@@ -26,7 +26,7 @@ describe('cli', () => {
 
   it('should display error if called with error in script', async () => {
     // Arrange
-    const scriptPath = `${__dirname}/../fixtures/scripts/hello.js`
+    const scriptPath = `${__dirname}/../fixtures/scripts/onlyReturnCmd.js`
     const argv: Array<string> = ['node', 'unshell', scriptPath]
     const env: NodeJS.ProcessEnv = {}
 
@@ -50,7 +50,7 @@ describe('cli', () => {
 
   it('should process script', async () => {
     // Arrange
-    const scriptPath = `${__dirname}/../fixtures/scripts/hello.js`
+    const scriptPath = `${__dirname}/../fixtures/scripts/onlyReturnCmd.js`
     const argv: Array<string> = ['node', 'unshell', scriptPath]
     const env: NodeJS.ProcessEnv = {}
 

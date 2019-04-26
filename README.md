@@ -21,4 +21,3 @@ where `script.js` is a javascript module which export a generator function:
 
 The code is available under the [MIT license](LICENSE).
 
-## TODO

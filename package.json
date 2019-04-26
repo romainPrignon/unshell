@@ -11,7 +11,7 @@
   "bin": {
     "unshell": "dist/cli.js"
   },
-  "main": "dist/core.js",
+  "main": "dist/unshell.js",
   "engines": {
     "node": "^10",
     "npm": "^6.3"
