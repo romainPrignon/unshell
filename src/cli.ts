@@ -40,6 +40,6 @@ if (require.main === module) {
   const env = process.env
 
   cli({ argv, env })
-    .then(process.exit(0))
-    .catch(process.exit(1))
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1))
 }

@@ -1,6 +1,18 @@
 import { unshell } from '../src/unshell'
 import { cli } from '../src/cli'
 
+beforeEach(() => {
+  console.log = jest.fn()
+  console.error = jest.fn()
+})
+
+afterEach(() => {
+  // @ts-ignore
+  console.log.mockRestore()
+  // @ts-ignore
+  console.error.mockRestore()
+})
+
 describe('unshell', () => {
   it('should execute multiple command as expected', async () => {
     // Given
@@ -11,9 +23,14 @@ describe('unshell', () => {
     }
     const args: Array<any> = []
 
+    // When
     await unshell(opt)(script)(args)
 
-    // TODO: expect
+    // Then
+    expect(console.log).toHaveBeenNthCalledWith(1, `• echo hello`)
+    expect(console.log).toHaveBeenNthCalledWith(2, `➜ hello\n`)
+    expect(console.log).toHaveBeenNthCalledWith(3, `• echo world`)
+    expect(console.log).toHaveBeenNthCalledWith(4, `➜ world\n`)
   })
 })
 
@@ -23,12 +40,13 @@ describe('cli', () => {
     const scriptPath = `${__dirname}/../fixtures/scripts/yieldMultipleCommand.js`
     const env = {}
 
-    try {
-      await cli({ argv: ['node', 'unshell', scriptPath], env })
-    } catch (err) {
-      console.error(err)
-    }
+    // When
+    await cli({ argv: ['node', 'unshell', scriptPath], env })
 
-    // TODO: expect
+    // Then
+    expect(console.log).toHaveBeenNthCalledWith(1, `• echo hello`)
+    expect(console.log).toHaveBeenNthCalledWith(2, `➜ hello\n`)
+    expect(console.log).toHaveBeenNthCalledWith(3, `• echo world`)
+    expect(console.log).toHaveBeenNthCalledWith(4, `➜ world\n`)
   })
 })
