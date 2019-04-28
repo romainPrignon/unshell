@@ -24,7 +24,7 @@ describe('unshell', () => {
     const args: Array<any> = []
 
     // When
-    await unshell(opt)(script)(args)
+    await unshell(opt)(script, ...args)
 
     // Then
     expect(console.log).toHaveBeenNthCalledWith(1, `• echo hello`)

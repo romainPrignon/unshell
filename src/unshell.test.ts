@@ -29,27 +29,17 @@ describe('unshell', () => {
     env: {}
   }
 
-  it('should return if script is a generator', () => {
-    // Arrange
-    const script = function * (): IterableIterator<string> {
-      yield `ok`
-    }
-
+  it('should return async function when called with options', async () => {
     // Act
-    const output = unshell(opt)(script)
+    const output = unshell(opt)
 
     // Assert
     expect(output).toBeInstanceOf(Function)
   })
 
-  it('should handle script with default option', () => {
-    // Arrange
-    const script = function* (): IterableIterator<string> {
-      yield `ok`
-    }
-
+  it('should return async function when called with default options', async () => {
     // Act
-    const output = unshell()(script)
+    const output = unshell()
 
     // Assert
     expect(output).toBeInstanceOf(Function)
@@ -62,7 +52,7 @@ describe('unshell', () => {
     }
 
     try {
-      await unshell(opt)(script)()
+      await unshell(opt)(script)
 
       done(`Script is not a generator`)
     } catch (err) {
@@ -90,7 +80,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     // Assert
     expect(console.log).toHaveBeenNthCalledWith(1, `• ${cmd}`)
@@ -114,7 +104,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     expect(execMock).toHaveBeenCalledWith(cmd, opt)
   })
@@ -136,7 +126,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     // Assert
     expect(console.log).toHaveBeenCalledTimes(1)
@@ -161,7 +151,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     expect(execMock).toHaveBeenNthCalledWith(1, cmd, opt)
     expect(execMock).toHaveBeenNthCalledWith(2, cmd, opt)
@@ -189,7 +179,7 @@ describe('unshell', () => {
 
     // Act
     try {
-      await unshell(opt)(script)()
+      await unshell(opt)(script)
 
       done(`It doesn't handle stderr properly`)
     } catch (err) {
@@ -221,7 +211,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     // Assert
     expect(console.log).toHaveBeenNthCalledWith(1, `• ${cmd}`)
@@ -246,7 +236,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     // Assert
     expect(console.log).toHaveBeenCalledTimes(1)
@@ -271,7 +261,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell(opt)(script)()
+    await unshell(opt)(script)
 
     // Assert
     // yield
@@ -282,6 +272,37 @@ describe('unshell', () => {
     // return
     expect(console.log).toHaveBeenNthCalledWith(3, `• ${cmd}`)
     expect(execMock).toHaveBeenNthCalledWith(2, cmd, opt)
+    expect(console.log).toHaveBeenNthCalledWith(4, `➜ ${stdout}`)
+  })
+
+  it('should pass arguments to script', async () => {
+    // Arrange
+    const script = function* (...args: Array<number>) {
+      for (const arg of args) {
+        yield `echo ${arg}`
+      }
+    }
+
+    // Mock
+    const execMock = jest.fn((cmd: Command, opt: Options) => ({
+      stdout
+    }))
+
+    // @ts-ignore
+    util.promisify = jest.fn().mockImplementation(() => {
+      return execMock
+    })
+
+    // Act
+    await unshell<Array<number>>(opt)(script, 1, 2)
+
+    // Assert
+    expect(console.log).toHaveBeenNthCalledWith(1, `• echo 1`)
+    expect(execMock).toHaveBeenNthCalledWith(1, 'echo 1', opt)
+    expect(console.log).toHaveBeenNthCalledWith(2, `➜ ${stdout}`)
+
+    expect(console.log).toHaveBeenNthCalledWith(3, `• echo 2`)
+    expect(execMock).toHaveBeenNthCalledWith(2, 'echo 2', opt)
     expect(console.log).toHaveBeenNthCalledWith(4, `➜ ${stdout}`)
   })
 })

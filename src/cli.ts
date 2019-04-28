@@ -22,7 +22,7 @@ export const cli = async ({ argv, env }: MainOpt): Promise<void> => {
   }
 
   try {
-    await unshell({ env })(script)(...args)
+    await unshell({ env })(script, ...args)
   } catch (err) {
     // TODO: if code unshell
     const msg = `

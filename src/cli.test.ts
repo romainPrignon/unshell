@@ -36,7 +36,7 @@ describe('cli', () => {
     console.error = jest.fn()
 
     // @ts-ignore
-    unshell.unshell = jest.fn(() => () => () => { throw error })
+    unshell.unshell = jest.fn(() => async () => { throw error })
 
     path.resolve = jest.fn(() => { return scriptPath })
 
@@ -58,7 +58,7 @@ describe('cli', () => {
     console.error = jest.fn()
 
     // @ts-ignore
-    unshell.unshell = jest.fn(() => () => () => { return })
+    unshell.unshell = jest.fn(() => async () => { return })
 
     path.resolve = jest.fn(() => { return scriptPath })
 
