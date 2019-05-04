@@ -27,6 +27,11 @@ export const unshell = <Args extends Array<unknown>>(opt: Options = defaultOptio
     let cmd = it.next()
 
     while (cmd.done === false) {
+      if (isEmptyCmd(cmd.value)) {
+        cmd = it.next()
+        continue
+      }
+
       console.log(`• ${cmd.value}`)
 
       try {
@@ -59,3 +64,4 @@ export const unshell = <Args extends Array<unknown>>(opt: Options = defaultOptio
 }
 
 const isGenerator = (fn: Function): fn is GeneratorFunction => fn.constructor.name === 'GeneratorFunction'
+const isEmptyCmd = (cmd: string): boolean => !cmd.length
