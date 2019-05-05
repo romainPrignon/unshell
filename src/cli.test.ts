@@ -11,7 +11,7 @@ import { cli } from './cli'
 describe('cli', () => {
   it('should display error if called with no script', async () => {
     // Arrange
-    const argv: Array<string> = []
+    const argv: Array<string> = ['node', 'unshell', 'run']
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
@@ -21,13 +21,13 @@ describe('cli', () => {
 
     // Assert
     await expect(cli({ argv, env })).rejects.toThrow(error)
-    expect(console.error).toHaveBeenCalled()
+    expect(console.error).toHaveBeenCalledWith(`${red('✘')} unshell: Invalid SCRIPT_PATH`)
   })
 
   it('should display error if called with error in script', async () => {
     // Arrange
     const scriptPath = `${__dirname}/../fixtures/scripts/onlyReturnCmd.js`
-    const argv: Array<string> = ['node', 'unshell', scriptPath]
+    const argv: Array<string> = ['node', 'unshell', 'run', scriptPath]
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
@@ -48,10 +48,10 @@ describe('cli', () => {
     expect(msg).toEqual(`${red('✘')} unshell: something went wrong`)
   })
 
-  it('should process script', async () => {
+  it('should execute script on "run" command', async () => {
     // Arrange
     const scriptPath = `${__dirname}/../fixtures/scripts/onlyReturnCmd.js`
-    const argv: Array<string> = ['node', 'unshell', scriptPath]
+    const argv: Array<string> = ['node', 'unshell', 'run', scriptPath]
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
@@ -65,5 +65,31 @@ describe('cli', () => {
     // Assert
     await expect(cli({ argv, env })).resolves.toEqual(undefined)
     expect(console.error).not.toHaveBeenCalled()
+  })
+
+  it('should display help if called with nothing', async () => {
+    // Arrange
+    const argv: Array<string> = ['node', 'unshell']
+    const env: NodeJS.ProcessEnv = {}
+
+    // Mock
+    console.log = jest.fn()
+
+    // Assert
+    await expect(cli({ argv, env })).resolves.toEqual(undefined)
+    expect(console.log).toHaveBeenCalled()
+  })
+
+  it('should display help on "help" command', async () => {
+    // Arrange
+    const argv: Array<string> = ['node', 'unshell', 'help']
+    const env: NodeJS.ProcessEnv = {}
+
+    // Mock
+    console.log = jest.fn()
+
+    // Assert
+    await expect(cli({ argv, env })).resolves.toEqual(undefined)
+    expect(console.log).toHaveBeenCalled()
   })
 })

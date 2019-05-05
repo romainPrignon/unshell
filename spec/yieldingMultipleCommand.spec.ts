@@ -46,7 +46,7 @@ describe('yieldingMultipleCommand', () => {
       const env = {}
 
       // When
-      await cli({ argv: ['node', 'unshell', scriptPath], env })
+      await cli({ argv: ['node', 'unshell', 'run', scriptPath], env })
 
       // Then
       expect(console.log).toHaveBeenNthCalledWith(1, `• echo hello`)
@@ -60,10 +60,11 @@ describe('yieldingMultipleCommand', () => {
     it('should execute multiple command as expected from e2e', (done) => {
       // Given
       const cliPath = `${__dirname}/../src/cli.ts`
+      const unshellCommand = 'run'
       const scriptPath = `${__dirname}/../fixtures/scripts/yieldMultipleCommand.js`
 
       // When
-      const subprocess = exec(`ts-node ${cliPath} ${scriptPath}`, (_, stdout) => {
+      const subprocess = exec(`ts-node ${cliPath} ${unshellCommand} ${scriptPath}`, (_, stdout) => {
         // Then
         expect(stdout).toEqual('• echo hello\n➜ hello\n\n• echo world\n➜ world\n\n')
 

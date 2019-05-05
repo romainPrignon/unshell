@@ -56,7 +56,7 @@ describe('yieldEnvVarCommand', () => {
       process.env.SOME_ENV_VAR = env.SOME_ENV_VAR
 
       // When
-      await cli({ argv: ['node', 'unshell', scriptPath], env })
+      await cli({ argv: ['node', 'unshell', 'run', scriptPath], env })
 
       // Then
       expect(console.log).toHaveBeenNthCalledWith(1, `node: ${SOME_ENV_VALUE}`)
@@ -72,12 +72,13 @@ describe('yieldEnvVarCommand', () => {
     it('should execute command with env vars from cli from e2e', (done) => {
       // Given
       const cliPath = `${__dirname}/../src/cli.ts`
+      const unshellCommand = 'run'
       const scriptPath = `${__dirname}/../fixtures/scripts/yieldEnvVarCommand.js`
 
       const SOME_ENV_VALUE = 'SOME_ENV_VALUE'
 
       // When
-      const subprocess = exec(`SOME_ENV_VAR=${SOME_ENV_VALUE} ts-node ${cliPath} ${scriptPath}`, (_, stdout) => {
+      const subprocess = exec(`SOME_ENV_VAR=${SOME_ENV_VALUE} ts-node ${cliPath} ${unshellCommand} ${scriptPath}`, (_, stdout) => {
         // Then
         expect(stdout).toEqual(`node: ${SOME_ENV_VALUE}\n• echo $SOME_ENV_VAR\n➜ ${SOME_ENV_VALUE}\n\n`)
 

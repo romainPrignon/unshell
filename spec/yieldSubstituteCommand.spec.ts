@@ -21,7 +21,7 @@ describe('yieldSubstituteCommand', () => {
       const opt = { env: {} }
 
       const echoFoo = () => `echo foo`
-      const some_value = "some_value"
+      const some_value = 'some_value'
 
       const script = function* () {
         yield `echo $(${echoFoo()})`
