@@ -2,8 +2,9 @@
 
 import { resolve } from 'path'
 
-import { unshell } from './unshell'
+import { unshell, assertUnshellScript } from './unshell'
 import { red } from './utils/colors'
+import { Script } from '../type'
 
 
 type MainOpt = { argv: Array<string>, env: NodeJS.ProcessEnv }
@@ -22,14 +23,7 @@ Commands:
 const run = async ({ argv, env }: MainOpt): Promise<void> => {
   const [_, scriptPath, ...args] = argv.slice(2)
 
-  let script
-  try {
-    script = require(resolve(scriptPath))
-  } catch (err) {
-    console.error(`${red('✘')} unshell: Invalid SCRIPT_PATH`)
-
-    throw err
-  }
+  const script = resolveScript(scriptPath)
 
   try {
     await unshell({ env })(script, ...args)
@@ -42,6 +36,26 @@ const run = async ({ argv, env }: MainOpt): Promise<void> => {
 
     throw err // or better depending on debug
   }
+}
+
+const resolveScript = (scriptPath: string): Script => {
+  let script
+  try {
+    script = require(resolve(scriptPath))
+  } catch (err) {
+    console.error(`${red('✘')} unshell: Invalid SCRIPT_PATH`)
+    throw err
+  }
+
+  try {
+    assertUnshellScript(script)
+  } catch (err) {
+    console.error(`${red('✘')} ${err.message}`)
+
+    throw err
+  }
+
+  return script
 }
 
 export const cli = async ({ argv, env }: MainOpt): Promise<void> => {

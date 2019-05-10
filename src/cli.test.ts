@@ -24,6 +24,30 @@ describe('cli', () => {
     expect(console.error).toHaveBeenCalledWith(`${red('✘')} unshell: Invalid SCRIPT_PATH`)
   })
 
+  it('should display error if called with a script that is not unshell compatible', async () => {
+    // Arrange
+    const scriptPath = `${__dirname}/../fixtures/scripts/notCompatibleCmd.js`
+    const argv: Array<string> = ['node', 'unshell', 'run', scriptPath]
+    const env: NodeJS.ProcessEnv = {}
+
+    // Mock
+    const error = new Error('some-error')
+
+    console.error = jest.fn()
+
+    // @ts-ignore
+    unshell.assertUnshellScript = jest.fn(() => { throw error })
+
+    path.resolve = jest.fn(() => { return scriptPath })
+
+    // Assert
+    await expect(cli({ argv, env })).rejects.toThrow()
+
+    // @ts-ignore
+    const msg = console.error.mock.calls[0][0].trim()
+    expect(msg).toEqual(`${red('✘')} ${error.message}`)
+  })
+
   it('should display error if called with error in script', async () => {
     // Arrange
     const scriptPath = `${__dirname}/../fixtures/scripts/onlyReturnCmd.js`
@@ -37,6 +61,8 @@ describe('cli', () => {
 
     // @ts-ignore
     unshell.unshell = jest.fn(() => async () => { throw error })
+    // @ts-ignore
+    unshell.assertUnshellScript = jest.fn(() => { return true })
 
     path.resolve = jest.fn(() => { return scriptPath })
 
@@ -59,6 +85,8 @@ describe('cli', () => {
 
     // @ts-ignore
     unshell.unshell = jest.fn(() => async () => { return })
+    // @ts-ignore
+    unshell.assertUnshellScript = jest.fn(() => { return true })
 
     path.resolve = jest.fn(() => { return scriptPath })
 

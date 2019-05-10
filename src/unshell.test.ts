@@ -1,5 +1,5 @@
 // type
-import { Options, Command } from '../type'
+import { Options, Command, Script } from '../type'
 
 // mock
 jest.mock('util')
@@ -56,7 +56,7 @@ describe('unshell', () => {
 
       done(`Script is not a generator`)
     } catch (err) {
-      expect(err.message).toEqual('module must be a generator')
+      expect(err.message).toEqual('unshell: Invalid SCRIPT')
 
       done()
     }
@@ -294,7 +294,7 @@ describe('unshell', () => {
     })
 
     // Act
-    await unshell<Array<number>>(opt)(script, 1, 2)
+    await unshell(opt)(script, 1, 2)
 
     // Assert
     expect(console.log).toHaveBeenNthCalledWith(1, `• echo 1`)

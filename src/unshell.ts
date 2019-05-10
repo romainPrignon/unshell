@@ -1,4 +1,4 @@
-import { Options, Command } from '../type'
+import { Options, Script, Args, Engine } from '../type'
 
 import util from 'util'
 import child_process from 'child_process'
@@ -8,27 +8,19 @@ const defaultOptions = {
   env: {}
 }
 
-export const unshell = <Args extends Array<unknown>>(opt: Options = defaultOptions) => {
+export const unshell = (opt: Options = defaultOptions): Engine => {
 
   const exec = util.promisify(child_process.exec)
 
-  return async (
-    script: (...args: Args) => IterableIterator<Command>,
-    ...args: Args
-  ): Promise<void> => {
-    if (!isGenerator(script)) {
-      const err = new Error(`module must be a generator`)
-      console.error(err)
-
-      throw err
-    }
+  return async (script: Script, ...args: Args): Promise<void> => {
+    assertUnshellScript(script)
 
     const it = script(...args)
-    let cmd = it.next()
+    let cmd = await it.next()
 
     while (cmd.done === false) {
       if (isEmptyCmd(cmd.value)) {
-        cmd = it.next()
+        cmd = await it.next()
         continue
       }
 
@@ -41,7 +33,7 @@ export const unshell = <Args extends Array<unknown>>(opt: Options = defaultOptio
           console.log(`➜ ${stdout}`)
         }
 
-        cmd = it.next(stdout)
+        cmd = await it.next(stdout)
       } catch (err) {
         console.error({
           cmd: err.cmd,
@@ -63,5 +55,17 @@ export const unshell = <Args extends Array<unknown>>(opt: Options = defaultOptio
   }
 }
 
-const isGenerator = (fn: Function): fn is GeneratorFunction => fn.constructor.name === 'GeneratorFunction'
+export const assertUnshellScript = (fn: Function): fn is Script => {
+  if (isGenerator(fn)) return true
+  if (isAsyncGenerator(fn)) return true
+
+  throw new Error('unshell: Invalid SCRIPT')
+}
+
+const isGenerator = (fn: Function): fn is () => IterableIterator<string> =>
+  fn.constructor.name === 'GeneratorFunction'
+
+const isAsyncGenerator = (fn: Function): fn is () => AsyncIterableIterator<string> =>
+  fn.constructor.name === 'AsyncGeneratorFunction'
+
 const isEmptyCmd = (cmd: string): boolean => !cmd.length
