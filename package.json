@@ -12,14 +12,29 @@
     "unshell": "dist/cli.js"
   },
   "main": "dist/unshell.js",
+  "types": "dist/unshell.d.ts",
   "engines": {
     "node": "^10",
     "npm": "^6.3"
   },
+  "files": [
+    "dist",
+    "examples",
+    "type",
+    "LICENSE",
+    "package-lock.json",
+    "package.json",
+    "README.md",
+    "unshell.png"
+  ],
   "scripts": {
     "build": "rm -rf dist/ && tsc",
     "lint": "tslint --project tsconfig.json",
-    "release": "release-it",
+    "version:patch": "npm version patch -m 'Release %s'",
+    "version:minor": "npm version minor -m 'Release %s'",
+    "version:major": "npm version major -m 'Release %s'",
+    "postversion": "git push --follow-tags",
+    "prepublish": "npm run build",
     "test": "jest --detectOpenHandles --forceExit",
     "test:examples": "jest --config examples/jest.config.js --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"
