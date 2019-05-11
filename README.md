@@ -1,4 +1,4 @@
-# ![unshell](./unshell.png) unshell
+# ![un](./unshell.png) shell
 
 > Set your shell free !
 
@@ -79,7 +79,7 @@ module.exports = (req, res) => {
 
 ## Examples
 Here is some examples of what you can do with unshell
-- [Pause containers](examples/pause-resume-container/README.md)
+- [Pause containers](examples/pause-resume-container)
 
 ## Contribute
  Please check out the issues labeled `help wanted` or `good-first-issue`. Try npx good-first-issue unshell
