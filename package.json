@@ -21,6 +21,7 @@
     "lint": "tslint --project tsconfig.json",
     "release": "release-it",
     "test": "jest --detectOpenHandles --forceExit",
+    "test:examples": "jest --config examples/jest.config.js --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"
   },
   "dependencies": {},
