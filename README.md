@@ -11,6 +11,7 @@ An an ops, sometimes, we need to run complex shell scripts. It will be cool to d
 * **Light**: There are no dependencies
 * **Easy**: A small abstraction over `child_process`
 * **Async**: Work with async/await command
+* **Testable**: Unshell script are easily testable because they yield execution control
 
 ## Setup
 
@@ -65,10 +66,12 @@ Given the precedent script `pause.js`
 Run it with `zeit/micro`
 ```js
 module.exports = (req, res) => {
-  const unshell = require('unshell')({env: process.env})
+  const {resolve} = require('path')
+  const {unshell} = require('unshell')
 
   try {
-    unshell('./scripts/pause.js')
+    const script = require(resolve('./scripts/pause.js'))
+    unshell({env: process.env})(script)
 
     res.end('OK')
   } catch (err) {
