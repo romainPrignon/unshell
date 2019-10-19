@@ -28,13 +28,13 @@
     "unshell.png"
   ],
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
+    "compile": "rm -rf dist/ && tsc",
     "lint": "tslint --project tsconfig.json",
     "version:patch": "npm version patch -m ':bookmark: Release %s'",
     "version:minor": "npm version minor -m ':bookmark: Release %s'",
     "version:major": "npm version major -m ':bookmark: Release %s'",
     "postversion": "git push --follow-tags",
-    "prepublish": "npm run build",
+    "prepublish": "npm run compile",
     "test": "jest --detectOpenHandles --forceExit",
     "test:examples": "jest --config examples/jest.config.js --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"

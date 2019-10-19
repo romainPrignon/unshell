@@ -1,0 +1,23 @@
+name: cd
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  cd:
+    name: cd
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm install
+    - run: npm run compile
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
