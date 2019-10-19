@@ -2,6 +2,8 @@
 
 > Set your shell free !
 
+![](https://github.com/romainprignon/unshell/workflows/ci/badge.svg)
+
 Combine the flexibility of a programming language with the knowledge of shell command.
 As developer, sometimes, we need to run shell scripts. It will be cool to do so with the familiarity of a programming language.
 An an ops, sometimes, we need to run complex shell scripts. It will be cool to do so with the power of a programming language.
