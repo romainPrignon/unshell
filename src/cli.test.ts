@@ -1,12 +1,15 @@
-jest.mock('./unshell.ts')
+// mock
 import * as unshell from './unshell'
-
-jest.mock('path')
 import path from 'path'
 
+// test
 import { red } from './utils/colors'
 import { cli } from './cli'
 
+
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 
 describe('cli', () => {
   it('should display error if called with no script', async () => {
@@ -16,11 +19,11 @@ describe('cli', () => {
 
     // Mock
     const error = new Error('path-error')
-    path.resolve = jest.fn(() => { throw error })
-    console.error = jest.fn()
+    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(path, 'resolve').mockImplementation(() => { throw error })
 
     // Assert
-    await expect(cli({ argv, env })).rejects.toThrow(error)
+    await expect(cli({ argv, env })).rejects.toEqual(error)
     expect(console.error).toHaveBeenCalledWith(`${red('✘')} unshell: Invalid SCRIPT_PATH`)
   })
 
@@ -32,19 +35,14 @@ describe('cli', () => {
 
     // Mock
     const error = new Error('some-error')
-
-    console.error = jest.fn()
-
-    // @ts-ignore
-    unshell.assertUnshellScript = jest.fn(() => { throw error })
-
-    path.resolve = jest.fn(() => { return scriptPath })
+    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(unshell, 'assertUnshellScript').mockImplementation(() => { throw error })
+    jest.spyOn(path, 'resolve').mockImplementation(() => { return scriptPath })
 
     // Assert
     await expect(cli({ argv, env })).rejects.toThrow()
 
-    // @ts-ignore
-    const msg = console.error.mock.calls[0][0].trim()
+    const msg = consoleErrorMock.mock.calls[0][0].trim()
     expect(msg).toEqual(`${red('✘')} ${error.message}`)
   })
 
@@ -57,20 +55,15 @@ describe('cli', () => {
     // Mock
     const error = new Error('some-error')
 
-    console.error = jest.fn()
-
-    // @ts-ignore
-    unshell.unshell = jest.fn(() => async () => { throw error })
-    // @ts-ignore
-    unshell.assertUnshellScript = jest.fn(() => { return true })
-
-    path.resolve = jest.fn(() => { return scriptPath })
+    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(unshell, 'unshell').mockImplementation(() => { throw error })
+    jest.spyOn(unshell, 'assertUnshellScript').mockImplementation(() => { return true })
+    jest.spyOn(path, 'resolve').mockImplementation(() => { return scriptPath })
 
     // Assert
     await expect(cli({ argv, env })).rejects.toThrow(error)
 
-    // @ts-ignore
-    const msg = console.error.mock.calls[0][0].trim()
+    const msg = consoleErrorMock.mock.calls[0][0].trim()
     expect(msg).toEqual(`${red('✘')} unshell: something went wrong`)
   })
 
@@ -81,14 +74,10 @@ describe('cli', () => {
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
-    console.error = jest.fn()
-
-    // @ts-ignore
-    unshell.unshell = jest.fn(() => async () => { return })
-    // @ts-ignore
-    unshell.assertUnshellScript = jest.fn(() => { return true })
-
-    path.resolve = jest.fn(() => { return scriptPath })
+    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(unshell, 'unshell').mockImplementation(() => async () => { return })
+    jest.spyOn(unshell, 'assertUnshellScript').mockImplementation(() => { return true })
+    jest.spyOn(path, 'resolve').mockImplementation(() => { return scriptPath })
 
     // Assert
     await expect(cli({ argv, env })).resolves.toEqual(undefined)
@@ -101,7 +90,7 @@ describe('cli', () => {
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
-    console.log = jest.fn()
+    jest.spyOn(console, 'log').mockImplementation()
 
     // Assert
     await expect(cli({ argv, env })).resolves.toEqual(undefined)
@@ -114,7 +103,7 @@ describe('cli', () => {
     const env: NodeJS.ProcessEnv = {}
 
     // Mock
-    console.log = jest.fn()
+    jest.spyOn(console, 'log').mockImplementation()
 
     // Assert
     await expect(cli({ argv, env })).resolves.toEqual(undefined)

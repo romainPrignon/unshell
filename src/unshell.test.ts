@@ -1,24 +1,15 @@
 // type
-import { Options, Command, Script } from '../type'
+import { Options, Command } from '../type'
 
 // mock
-jest.mock('util')
 import util from 'util'
 
 // test
 import { unshell } from './unshell'
 
 
-beforeEach(() => {
-  console.log = jest.fn()
-  console.error = jest.fn()
-})
-
 afterEach(() => {
-  // @ts-ignore
-  console.log.mockRestore()
-  // @ts-ignore
-  console.error.mockRestore()
+  jest.restoreAllMocks()
 })
 
 describe('unshell', () => {
@@ -45,22 +36,13 @@ describe('unshell', () => {
     expect(output).toBeInstanceOf(Function)
   })
 
-  it('should throw if script is not a generator', async (done) => {
+  it('should throw if script is not a generator', async () => {
     // Arrange
-    const script: any = function () {
+    const script: any = () => {
       return cmd
     }
 
-    try {
-      await unshell(opt)(script)
-
-      done(`Script is not a generator`)
-    } catch (err) {
-      expect(err.message).toEqual('unshell: Invalid SCRIPT')
-
-      done()
-    }
-
+    await expect(unshell(opt)(script)).rejects.toHaveProperty('message', 'unshell: Invalid SCRIPT')
   })
 
   it('should log command', async () => {
@@ -70,13 +52,12 @@ describe('unshell', () => {
     }
 
     // Mock
-    const execMock = jest.fn(() => ({
-      stdout
-    }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
-      return execMock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(util, 'promisify').mockImplementation(() => () => {
+      return {
+        stdout
+      }
     })
 
     // Act
@@ -94,12 +75,13 @@ describe('unshell', () => {
     }
 
     // Mock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+
     const execMock = jest.fn((cmd: Command, opt: Options) => ({
       stdout
     }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
+    jest.spyOn(util, 'promisify').mockImplementation(() => {
       return execMock
     })
 
@@ -116,13 +98,12 @@ describe('unshell', () => {
     }
 
     // Mock
-    const execMock = jest.fn((cmd: Command, opt: Options) => ({
-      stdout: undefined
-    }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
-      return execMock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(util, 'promisify').mockImplementation(() => () => {
+      return {
+        stdout: undefined
+      }
     })
 
     // Act
@@ -141,12 +122,13 @@ describe('unshell', () => {
     }
 
     // Mock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+
     const execMock = jest.fn((cmd: Command, opt: Options) => ({
       stdout
     }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
+    jest.spyOn(util, 'promisify').mockImplementation(() => {
       return execMock
     })
 
@@ -157,41 +139,37 @@ describe('unshell', () => {
     expect(execMock).toHaveBeenNthCalledWith(2, cmd, opt)
   })
 
-  it('should handle command throwing error', async (done) => {
+  it('should handle command throwing error', async () => {
     // Arrange
     const script = function* (): IterableIterator<string> {
       yield cmd
     }
 
     // Mock
-    const errMock: any = new Error(stderr)
-    errMock.stderr = stderr
-    errMock.cmd = cmd
-
+    const err: any = new Error(stderr)
+    const errMock = {
+      ...err,
+      stderr: stderr,
+      cmd: cmd
+    }
     const execMock = jest.fn((cmd: Command, opt: Options) => {
       throw errMock
     })
 
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(util, 'promisify').mockImplementation(() => {
       return execMock
     })
 
     // Act
-    try {
-      await unshell(opt)(script)
+    await expect(unshell(opt)(script)).rejects.toEqual(errMock)
 
-      done(`It doesn't handle stderr properly`)
-    } catch (err) {
-      expect(console.error).toHaveBeenCalledWith({
-        cmd: errMock.cmd,
-        stderr: errMock.stderr
-      })
-
-      expect(err).toEqual(errMock)
-
-      done()
-    }
+    // Assert
+    expect(console.error).toHaveBeenCalledWith({
+      cmd: errMock.cmd,
+      stderr: errMock.stderr
+    })
   })
 
   it('should log returned command', async () => {
@@ -201,12 +179,13 @@ describe('unshell', () => {
     }
 
     // Mock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+
     const execMock = jest.fn((cmd: Command, opt: Options) => ({
       stdout
     }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
+    jest.spyOn(util, 'promisify').mockImplementation(() => {
       return execMock
     })
 
@@ -226,13 +205,12 @@ describe('unshell', () => {
     }
 
     // Mock
-    const execMock = jest.fn((cmd: Command, opt: Options) => ({
-      stdout: undefined
-    }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
-      return execMock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+    jest.spyOn(util, 'promisify').mockImplementation(() => () => {
+      return {
+        stdout: undefined
+      }
     })
 
     // Act
@@ -251,12 +229,13 @@ describe('unshell', () => {
     }
 
     // Mock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+
     const execMock = jest.fn((cmd: Command, opt: Options) => ({
       stdout
     }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
+    jest.spyOn(util, 'promisify').mockImplementation(() => {
       return execMock
     })
 
@@ -277,19 +256,20 @@ describe('unshell', () => {
 
   it('should pass arguments to script', async () => {
     // Arrange
-    const script = function* (...args: Array<number>) {
+    const script = function* (...args: Array<number>): IterableIterator<string> {
       for (const arg of args) {
         yield `echo ${arg}`
       }
     }
 
     // Mock
+    jest.spyOn(console, 'log').mockImplementation()
+    jest.spyOn(console, 'error').mockImplementation()
+
     const execMock = jest.fn((cmd: Command, opt: Options) => ({
       stdout
     }))
-
-    // @ts-ignore
-    util.promisify = jest.fn().mockImplementation(() => {
+    jest.spyOn(util, 'promisify').mockImplementation(() => {
       return execMock
     })
 

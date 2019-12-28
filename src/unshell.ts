@@ -9,49 +9,13 @@ const defaultOptions = {
 }
 
 export const unshell = (opt: Options = defaultOptions): Engine => {
-
-  const exec = util.promisify(child_process.exec)
-
   return async (script: Script, ...args: Args): Promise<void> => {
     assertUnshellScript(script)
 
     const it = script(...args)
-    let cmd = await it.next()
 
-    while (cmd.done === false) {
-      if (isEmptyCmd(cmd.value)) {
-        cmd = await it.next()
-        continue
-      }
-
-      console.log(`• ${cmd.value}`)
-
-      try {
-        const { stdout } = await exec(cmd.value, opt)
-
-        if (stdout) {
-          console.log(`➜ ${stdout}`)
-        }
-
-        cmd = await it.next(stdout)
-      } catch (err) {
-        console.error({
-          cmd: err.cmd,
-          stderr: err.stderr
-        })
-
-        throw err
-      }
-    }
-
-    // last iteration
-    if (cmd.done === true && cmd.value) {
-      console.log(`• ${cmd.value}`)
-      const { stdout } = await exec(cmd.value, opt)
-      if (stdout) {
-        console.log(`➜ ${stdout}`)
-      }
-    }
+    const interpretor = Interpretor(opt)
+    await interpretor.interpret(it)
   }
 }
 
@@ -68,4 +32,43 @@ const isGenerator = (fn: Function): fn is () => IterableIterator<string> =>
 const isAsyncGenerator = (fn: Function): fn is () => AsyncIterableIterator<string> =>
   fn.constructor.name === 'AsyncGeneratorFunction'
 
-const isEmptyCmd = (cmd: string): boolean => !cmd.length
+const isEmptyCmd = (cmd: string): boolean => !cmd
+
+const Interpretor = (opt: Options) => {
+
+  const exec = util.promisify(child_process.exec)
+
+  return {
+    async interpret (it: any): Promise<any> {
+      const cmd = await it.next()
+
+      if (!cmd.value && cmd.done) {
+        return
+      }
+
+      // if empty
+      if (isEmptyCmd(cmd.value)) {
+        return this.interpret(it)
+      }
+
+      console.log(`• ${cmd.value}`)
+
+      try {
+        const { stdout } = await exec(cmd.value, opt)
+
+        if (stdout) {
+          console.log(`➜ ${stdout}`)
+        }
+
+        return await this.interpret(it)
+      } catch (err) {
+        console.error({
+          cmd: err.cmd,
+          stderr: err.stderr
+        })
+
+        throw err
+      }
+    }
+  }
+}

@@ -4,15 +4,12 @@ import { cli } from '../src/cli'
 
 
 beforeEach(() => {
-  console.log = jest.fn()
-  console.error = jest.fn()
+  jest.spyOn(console, 'log').mockImplementation()
+  jest.spyOn(console, 'error').mockImplementation()
 })
 
 afterEach(() => {
-  // @ts-ignore
-  console.log.mockRestore()
-  // @ts-ignore
-  console.error.mockRestore()
+  jest.restoreAllMocks()
 })
 
 describe('displayHelp', () => {

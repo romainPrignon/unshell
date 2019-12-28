@@ -2,15 +2,12 @@ import { unshell } from '../src/unshell'
 
 
 beforeEach(() => {
-  console.log = jest.fn()
-  console.error = jest.fn()
+  jest.spyOn(console, 'log').mockImplementation()
+  jest.spyOn(console, 'error').mockImplementation()
 })
 
 afterEach(() => {
-  // @ts-ignore
-  console.log.mockRestore()
-  // @ts-ignore
-  console.error.mockRestore()
+  jest.restoreAllMocks()
 })
 
 describe('yieldSubstituteCommand', () => {
@@ -21,12 +18,12 @@ describe('yieldSubstituteCommand', () => {
       const opt = { env: {} }
 
       const echoFoo = () => `echo foo`
-      const some_value = 'some_value'
+      const someValue = 'some_value'
 
-      const script = function* () {
+      const script = function* (): IterableIterator<string> {
         yield `echo $(${echoFoo()})`
         yield `
-          some_variable="${some_value}"
+          some_variable="${someValue}"
           echo $some_variable
         `
       }
@@ -37,7 +34,7 @@ describe('yieldSubstituteCommand', () => {
 
       // Then
       expect(console.log).toHaveBeenNthCalledWith(2, `➜ foo\n`)
-      expect(console.log).toHaveBeenNthCalledWith(4, `➜ ${some_value}\n`)
+      expect(console.log).toHaveBeenNthCalledWith(4, `➜ ${someValue}\n`)
     })
   })
 })

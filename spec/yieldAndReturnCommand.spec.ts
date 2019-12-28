@@ -5,15 +5,12 @@ import { cli } from '../src/cli'
 
 
 beforeEach(() => {
-  console.log = jest.fn()
-  console.error = jest.fn()
+  jest.spyOn(console, 'log').mockImplementation()
+  jest.spyOn(console, 'error').mockImplementation()
 })
 
 afterEach(() => {
-  // @ts-ignore
-  console.log.mockRestore()
-  // @ts-ignore
-  console.error.mockRestore()
+  jest.restoreAllMocks()
 })
 
 describe('yieldAndReturnCommand', () => {
@@ -22,7 +19,7 @@ describe('yieldAndReturnCommand', () => {
     it('should exec to a yield and return of a command', async () => {
       // Given
       const opt = { env: {} }
-      const script = function* () {
+      const script = function* (): IterableIterator<string> {
         yield `echo hello`
         return `echo world`
       }
