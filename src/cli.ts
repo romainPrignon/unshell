@@ -38,13 +38,19 @@ const run = async ({ argv, env }: MainOpt): Promise<void> => {
   }
 }
 
-const resolveScript = (scriptPath: string): Script => {
-  let script
+const may = <T>(success: () => T): T => {
   try {
-    script = require(resolve(scriptPath))
+    return success()
   } catch (err) {
+    return err
+  }
+}
+
+const resolveScript = (scriptPath: string): Script => {
+  const script = may<Script>(() => require(resolve(scriptPath)))
+  if (script instanceof Error) {
     console.error(`${red('✘')} unshell: Invalid SCRIPT_PATH`)
-    throw err
+    throw script
   }
 
   try {

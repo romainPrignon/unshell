@@ -5,15 +5,12 @@ import { cli } from '../src/cli'
 
 
 beforeEach(() => {
-  console.log = jest.fn()
-  console.error = jest.fn()
+  jest.spyOn(console, 'log').mockImplementation()
+  jest.spyOn(console, 'error').mockImplementation()
 })
 
 afterEach(() => {
-  // @ts-ignore
-  console.log.mockRestore()
-  // @ts-ignore
-  console.error.mockRestore()
+  jest.restoreAllMocks()
 })
 
 describe('yieldEnvVarCommand', () => {
@@ -25,8 +22,9 @@ describe('yieldEnvVarCommand', () => {
       const opt = { env: {
         SOME_ENV_VAR: SOME_ENV_VALUE
       } }
+      // tslint:disable-next-line: no-object-mutation
       process.env.SOME_ENV_VAR = opt.env.SOME_ENV_VAR
-      const script = function* () {
+      const script = function* (): IterableIterator<string> {
         console.log(`node: ${process.env.SOME_ENV_VAR}`)
         yield `echo $SOME_ENV_VAR`
       }
@@ -41,6 +39,7 @@ describe('yieldEnvVarCommand', () => {
       expect(console.log).toHaveBeenNthCalledWith(3, `➜ ${SOME_ENV_VALUE}\n`)
 
       // Clean
+      // tslint:disable-next-line
       delete process.env.SOME_ENV_VAR
     })
   })
@@ -53,6 +52,7 @@ describe('yieldEnvVarCommand', () => {
       const env = {
         SOME_ENV_VAR: SOME_ENV_VALUE
       }
+      // tslint:disable-next-line: no-object-mutation
       process.env.SOME_ENV_VAR = env.SOME_ENV_VAR
 
       // When
@@ -64,6 +64,7 @@ describe('yieldEnvVarCommand', () => {
       expect(console.log).toHaveBeenNthCalledWith(3, `➜ ${SOME_ENV_VALUE}\n`)
 
       // Clean
+      // tslint:disable-next-line
       delete process.env.SOME_ENV_VAR
     })
   })

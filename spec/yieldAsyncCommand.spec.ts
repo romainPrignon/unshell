@@ -2,15 +2,12 @@ import { unshell } from '../src/unshell'
 
 
 beforeEach(() => {
-  console.log = jest.fn()
-  console.error = jest.fn()
+  jest.spyOn(console, 'log').mockImplementation()
+  jest.spyOn(console, 'error').mockImplementation()
 })
 
 afterEach(() => {
-  // @ts-ignore
-  console.log.mockRestore()
-  // @ts-ignore
-  console.error.mockRestore()
+  jest.restoreAllMocks()
 })
 
 describe('yieldAsyncCommand', () => {
@@ -36,7 +33,7 @@ describe('yieldAsyncCommand', () => {
         })
       }
 
-      const script = async function* () {
+      const script = async function* (): AsyncIterableIterator<string> {
         yield hello()
         yield world()
       }
@@ -62,7 +59,7 @@ describe('yieldAsyncCommand', () => {
         })
       }
 
-      const script = async function* () {
+      const script = async function* (): AsyncIterableIterator<string> {
         console.log(await hello())
         yield `echo world`
       }

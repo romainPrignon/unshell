@@ -29,7 +29,9 @@
   ],
   "scripts": {
     "compile": "rm -rf dist/ && tsc",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "npm run lint:src && npm run lint:spec",
+    "lint:src": "tslint --project tsconfig.json",
+    "lint:spec": "tslint --project spec/tsconfig.json",
     "version:patch": "npm version patch -m ':bookmark: Release %s'",
     "version:minor": "npm version minor -m ':bookmark: Release %s'",
     "version:major": "npm version major -m ':bookmark: Release %s'",
@@ -50,6 +52,7 @@
     "ts-node": "^8.1.0",
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
+    "tslint-immutable": "^6.0.1",
     "typescript": "^3.4.5"
   },
   "husky": {
