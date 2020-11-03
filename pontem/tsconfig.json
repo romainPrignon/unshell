@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "outDir": "dist",
+    "lib": [
+      "es2018"
+    ],
+    "jsx": "preserve",
+    "declaration": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "removeComments": false,
+    "strict": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

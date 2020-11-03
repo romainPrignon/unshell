@@ -1,0 +1,12 @@
+FROM ubuntu:xenial
+
+RUN apt update
+RUN apt install -y \
+    curl \
+    apt-transport-https \
+    build-essential \
+    python-software-properties \
+    software-properties-common \
+    language-pack-en-base
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt install -y nodejs

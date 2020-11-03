@@ -1,0 +1,8 @@
+FROM pontem:base
+
+COPY dist dist
+COPY node_modules node_modules
+COPY test/provision.test.js test/provision.test.js
+
+# provision start here
+RUN node ./test/provision.test.js

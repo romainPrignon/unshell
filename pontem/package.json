@@ -1,0 +1,83 @@
+{
+  "name": "pontem",
+  "version": "0.0.3",
+  "description": "Just United",
+  "author": "Romain Prignon <pro.rprignon@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romainPrignon/pontem.git"
+  },
+  "bin": {
+    "pontem": "./dist/cli/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "type/index.d.ts",
+  "engines": {
+    "node": "^8.0.0",
+    "npm": "^5.3.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist/ && tsc",
+    "build:dev": "tsc --noEmit --pretty",
+    "lint": "npm run lint:src && npm run lint:test",
+    "lint:src": "tslint --project tsconfig.json",
+    "lint:test": "tslint --project test/tsconfig.json",
+    "release": "release-it",
+    "test": "jest",
+    "test:coverage": "npm run test -- --coverage",
+    "test:watch": "npm run test -- --watch"
+  },
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "cosmiconfig": "^4.0.0",
+    "execa": "^0.10.0",
+    "ink": "0.4.1",
+    "ink-console": "1.0.0",
+    "ink-progress-bar": "2.1.1",
+    "ink-redux": "1.0.0",
+    "ink-tab": "1.1.0",
+    "ink-table": "0.0.3",
+    "minimist": "^1.2.0",
+    "rxjs": "beta",
+    "through2": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/execa": "0.9.0",
+    "@types/jest": "22.2.2",
+    "husky": "next",
+    "jest": "^22.4.3",
+    "release-it": "^7.2.1",
+    "ts-jest": "^22.4.2",
+    "tslint": "^5.9.1",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.8.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run build:dev && npm run test"
+    }
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "testMatch": [
+      "**/*.test.(ts|js)"
+    ],
+    "transform": {
+      "^.+\\.(ts)$": "ts-jest"
+    },
+    "coverageReporters": [
+      "text"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "functions": 100
+      }
+    }
+  }
+}
