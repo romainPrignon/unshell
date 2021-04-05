@@ -37,7 +37,7 @@
     "version:major": "npm version major -m ':bookmark: Release %s'",
     "postversion": "git push --follow-tags",
     "prepublish": "npm run compile",
-    "test": "jest --detectOpenHandles --forceExit",
+    "test": "jest --detectOpenHandles --forceExit --maxWorkers=50%",
     "test:examples": "jest --config examples/jest.config.js --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"
   },
