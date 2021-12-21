@@ -8,12 +8,16 @@ Combine the flexibility of a programming language with the knowledge of shell co
 As developer, sometimes, we need to run shell scripts. It will be cool to do so with the familiarity of a programming language.
 An an ops, sometimes, we need to run complex shell scripts. It will be cool to do so with the power of a programming language.
 
-## Features
+## Goals
 
 * **Light**: There are no dependencies
 * **Easy**: A small abstraction over `child_process`
-* **Async**: Work with async/await command
-* **Testable**: Unshell script are easily testable because they yield execution control
+* **Async**: Look and Feel synchroneous. Use Generators under the hood
+* **Testable**: Inject your own commands
+
+## No-Goals
+
+* **shell injection**: Unshell will not protect you from shell commands injection
 
 ## Setup
 
@@ -86,9 +90,15 @@ module.exports = (req, res) => {
 Here is some examples of what you can do with unshell
 - [Pause containers](examples/pause-resume-container)
 
-## Contribute
- Please check out the issues labeled `help wanted` or `good-first-issue`. Try npx good-first-issue unshell
-
 ## License
 
 The code is available under the [MIT license](LICENSE).
+
+## TODO
+✔ faire un binaire
+  - doit marcher sans avoir installer node
+- import { cd, pipe, read, sudo } from 'unshell'
+  - doit marcher sans avoir installé unshell en global
+  - version fp et oop
+- doit pouvoir exec un truc distant
+- import { ifconfig, echo, git } from 'unshell' (module sh de python)
