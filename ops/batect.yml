@@ -1,0 +1,21 @@
+config_variables:
+  node_version:
+    description: "node version to use"
+
+containers:
+  node:
+    image: node:18-bullseye-slim # should be a variable :'(
+    working_directory: /opt
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/node
+    volumes:
+      - local: ..
+        container: /opt
+        options: cached
+      - type: cache
+        name: node-modules
+        container: /opt/node_modules
+
+include:
+  - ./ci.yml
