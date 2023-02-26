@@ -14,8 +14,8 @@
   "main": "dist/unshell.js",
   "types": "dist/unshell.d.ts",
   "engines": {
-    "node": "^10",
-    "npm": "^6.3"
+    "node": ">=10",
+    "npm": ">=6.3"
   },
   "files": [
     "dist",

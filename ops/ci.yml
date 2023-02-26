@@ -1,0 +1,22 @@
+tasks:
+  install:
+    run:
+      container: node
+      command: npm install
+
+  compile:
+    run:
+      container: node
+      command: npm run compile
+
+  lint:
+    run:
+      container: node
+      command: npm run lint
+
+  test:
+    run:
+      container: node
+      command: npm run test
+
+

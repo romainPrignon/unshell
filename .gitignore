@@ -1,3 +1,4 @@
+**/.batect/caches/
 dist/
 coverage/
 node_modules/
