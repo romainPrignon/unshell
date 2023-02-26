@@ -1,3 +1,6 @@
+setup:
+	./bin/batect setup
+
 install:
 	batect -f ops/batect.yml --config-vars-file ops/batect.local.yml install
 
