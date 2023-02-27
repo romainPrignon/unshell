@@ -6,6 +6,18 @@ on:
       - v*
 
 jobs:
+  cd:
+    name: cd
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.3.0
+        with:
+          fetch-depth: 1
+
+      - run: make cd
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
   npm:
     name: npm
     runs-on: ubuntu-18.04

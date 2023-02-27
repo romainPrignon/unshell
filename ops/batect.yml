@@ -1,6 +1,8 @@
 config_variables:
   node_version:
     description: "node version to use"
+  npm_token:
+    description: "npm token to publish the package"
 
 containers:
   node:
@@ -18,4 +20,4 @@ containers:
         container: /opt/node_modules
 
 include:
-  - ./ci.yml
+  - ./tasks.yml
