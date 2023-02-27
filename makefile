@@ -16,3 +16,20 @@ publish: install
 ci: install compile lint test
 
 cd: install publish
+
+reverse-ci:
+	./bin/batect -f ops/batect.yml --config-vars-file ops/batect.local.yml ci
+
+reverse-ci-do: reverse-install reverse-compile reverse-lint reverse-test
+
+reverse-install:
+	npm install
+
+reverse-compile: reverse-install
+	npm run compile
+
+reverse-lint: reverse-install
+	npm run lint
+
+reverse-test: reverse-install
+	npm run test

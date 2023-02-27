@@ -19,6 +19,12 @@ tasks:
       container: node
       command: npm run test
 
+  # reverse mode: 1 container, multiple tasks
+  ci:
+    run:
+      container: dev
+      command: make reverse-ci-do
+
   publish:
     run:
       container: node

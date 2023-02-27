@@ -5,6 +5,20 @@ config_variables:
     description: "npm token to publish the package"
 
 containers:
+  # the container used for using tasks inside one container
+  dev:
+    build_directory: ../.batect/dev
+    working_directory: /opt
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/dev
+    volumes:
+      - local: ..
+        container: /opt
+        options: cached
+      - type: cache
+        name: node-modules
+        container: /opt/node_modules
   node:
     image: node:18-bullseye-slim # should be a variable :'(
     working_directory: /opt
