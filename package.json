@@ -12,6 +12,7 @@
     "unshell": "dist/cli.js"
   },
   "main": "dist/unshell.js",
+  "module": "dist/unshell.mjs",
   "types": "dist/unshell.d.ts",
   "engines": {
     "node": ">=10",
@@ -28,7 +29,8 @@
     "unshell.png"
   ],
   "scripts": {
-    "compile": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist/ && tsup src/cli.ts src/unshell.ts --format esm,cjs --external ./unshell --dts",
+    "check": "tsc --noEmit",
     "lint": "npm run lint:src && npm run lint:spec",
     "lint:src": "tslint --project tsconfig.json",
     "lint:spec": "tslint --project spec/tsconfig.json",
@@ -41,8 +43,8 @@
     "test:examples": "jest --config examples/jest.config.js --detectOpenHandles --forceExit",
     "test:coverage": "npm run test -- --coverage"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/is-generator-function": "^1.0.1",
     "@types/jest": "^24.0.0",
     "@types/node": "^10",
     "husky": "^1.1.2",
@@ -53,11 +55,15 @@
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
     "tslint-immutable": "^6.0.1",
-    "typescript": "^3.4.5"
+    "tsup": "^6.6.3",
+    "typescript": "^4.9.5"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm run test:coverage"
     }
+  },
+  "dependencies": {
+    "is-generator-function": "^1.0.10"
   }
 }

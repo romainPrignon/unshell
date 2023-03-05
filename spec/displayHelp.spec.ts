@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 
-import { cli } from '../src/cli'
+import { cli } from '../dist/cli'
 
 
 beforeEach(() => {

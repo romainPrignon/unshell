@@ -3,6 +3,8 @@ import { Options, Script, Args, Engine } from '../type'
 import util from 'util'
 import child_process from 'child_process'
 
+import isGeneratorFunction from 'is-generator-function'
+
 
 const defaultOptions = {
   env: {}
@@ -27,7 +29,7 @@ export const assertUnshellScript = (fn: Function): fn is Script => {
 }
 
 const isGenerator = (fn: Function): fn is () => IterableIterator<string> =>
-  fn.constructor.name === 'GeneratorFunction'
+  isGeneratorFunction(fn)
 
 const isAsyncGenerator = (fn: Function): fn is () => AsyncIterableIterator<string> =>
   fn.constructor.name === 'AsyncGeneratorFunction'
