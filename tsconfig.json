@@ -9,6 +9,7 @@
     "sourceMap": true,
     "strict": true,
     "noImplicitReturns": true,
+    "useUnknownInCatchVariables": false,
     "lib": [
       "es2018",
       "dom"
