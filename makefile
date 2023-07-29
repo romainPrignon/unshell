@@ -11,7 +11,7 @@ test: install
 	./bin/batect -f ops/batect.yml --config-vars-file ops/batect.local.yml test
 
 publish: install
-	./bin/batect -f ops/batect.yml --config-vars-file ops/batect.local.yml --config-var npm_token=${NPM_TOKEN} publish
+	npm publish --provenance
 
 ci: install compile lint test
 
