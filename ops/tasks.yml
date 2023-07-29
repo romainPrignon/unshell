@@ -22,7 +22,7 @@ tasks:
   publish:
     run:
       container: node
-      command: npm publish
+      command: npm publish --provenance
       environment:
         NPM_TOKEN: <{npm_token}
 
