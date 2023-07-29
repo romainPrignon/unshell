@@ -14,8 +14,8 @@
   "main": "dist/unshell.js",
   "types": "dist/unshell.d.ts",
   "engines": {
-    "node": ">=10",
-    "npm": ">=6.3"
+    "node": ">=14",
+    "npm": ">=9"
   },
   "files": [
     "dist",
@@ -44,7 +44,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^24.0.0",
-    "@types/node": "^10",
+    "@types/node": "^14",
     "husky": "^1.1.2",
     "jest": "^23.6.0",
     "release-it": "^7.6.1",
@@ -53,7 +53,7 @@
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
     "tslint-immutable": "^6.0.1",
-    "typescript": "^3.4.5"
+    "typescript": "^5.1.6"
   },
   "husky": {
     "hooks": {
