@@ -2,7 +2,7 @@ tasks:
   install:
     run:
       container: node
-      command: npm install
+      command: npm install --legacy-peer-deps
 
   compile:
     run:
