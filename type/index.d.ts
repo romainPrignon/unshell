@@ -2,7 +2,7 @@ export type Options = {
   env: NodeJS.ProcessEnv
 }
 
-export type Command = string
+export type Command = string | Array<string>
 
 export type Args = Array<any>
 
