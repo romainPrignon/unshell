@@ -16,3 +16,6 @@ publish: install
 ci: install compile lint test
 
 cd: install publish
+
+buildx:
+	docker buildx build --progress=plain -t unshell .

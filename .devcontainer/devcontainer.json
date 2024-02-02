@@ -1,0 +1,8 @@
+{
+  "name": "unshell",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile"
+  }
+  // "postCreateCommand": "cat /etc/os-release",
+}
