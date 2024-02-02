@@ -51,6 +51,15 @@ const Interpretor = (opt: Options) => {
         return this.interpret(it)
       }
 
+      // if is Array
+      if (Array.isArray(cmd.value)) {
+        cmd.value.forEach((c: string) => console.log(`• ${c}`))
+        const res = await Promise.all(cmd.value.map((c: string) => exec(c, opt)))
+        res.map(r => r.stdout).forEach((s: string) => console.log(`➜ ${s}`.trim()))
+
+        return this.interpret(it)
+      }
+
       console.log(`• ${cmd.value}`)
 
       try {
