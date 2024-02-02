@@ -1,0 +1,12 @@
+{
+  "name": "unshell",
+  "workspaceFolder": "/opt",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile"
+  },
+  "runArgs": [
+    "--name",
+    "unshell"
+  ]
+}
