@@ -5,14 +5,13 @@ FROM node:18.16.0-bullseye-slim as base
 
 WORKDIR /opt
 
-COPY package.json package-lock.json ./
-
 
 ###
 # install stage
 ###
 FROM base as install
 
+COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
 
 
