@@ -15,3 +15,33 @@ jobs:
           fetch-depth: 1
 
       - run: make ci
+
+  check-tests:
+    name: check-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: 'google-github-actions/run-gemini-cli@v0'
+        id: 'gemini'
+        with:
+          gemini_api_key: '${{ secrets.GEMINI_API_KEY }}'
+          settings: |-
+            {
+              "maxSessionTurns": 15,
+              "coreTools": [
+                "list_directory",
+                "read_file",
+                "write_file",
+                "glob",
+                "search_file_content",
+                "replace",
+                "run_shell_command(jest)"
+              ]
+            }
+          prompt: |-
+            I want to test the robustness of the tests in this project.
+            Read the src/ and spec/ folders first to understand the project.
+            Then, introduce one subtle bug in the src/ folder that tests must catch to make sure they are robust enough.
