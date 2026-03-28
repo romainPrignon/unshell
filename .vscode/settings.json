@@ -1,0 +1,45 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // TypeScript
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // Jest (orta.vscode-jest)
+  "jest.jestCommandLine": "npx jest",
+  "jest.autoRun": "off",
+
+  // GitHub Copilot
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".github/prompts": true
+  },
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Use a concise imperative sentence. Prefix with an emoji gitmoji if appropriate. Keep under 72 characters."
+    }
+  ],
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "file": ".github/prompts/code-review.prompt.md"
+    }
+  ],
+
+  // File associations
+  "files.associations": {
+    "*.prompt.md": "markdown",
+    "*.instructions.md": "markdown"
+  },
+
+  // Exclude build artifacts from search
+  "search.exclude": {
+    "**/dist": true,
+    "**/node_modules": true
+  },
+  "files.exclude": {
+    "**/dist": false,
+    "**/node_modules": true
+  }
+}
